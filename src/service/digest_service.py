@@ -44,6 +44,30 @@ async def digest_file(file):
 
     dataframe = pd.concat(dataframes, ignore_index=True)
 
+    dataframe.drop(columns=['Low latitude (deg)',
+                            'Low longitude (deg)', 'High latitude (deg)', 'High longitude (deg)', 'Max speed (m/s)', 'Min speed (m/s)',
+                            'Average weight (kg)', 'Max weight (kg)',
+                            'Min weight (kg)', 'Running duration (ms)', 'Cycling duration (ms)'], inplace=True)
+
+    dataframe.rename(columns={
+        "Start time": "start_time",
+        "End time": "end_time",
+        "Move Minutes count": "active_minutes",
+        "Calories (kcal)": "calories_burned",
+        "Distance (m)": "distance_meters",
+        "Heart Points": "heart_points",
+        "Heart Minutes": "heart_minutes",
+        "Average speed (m/s)": "avg_speed_mps",
+        "Step count": "step_count",
+        "Walking duration (ms)": "walking_duration_ms",
+        "Date": "date"
+    }, inplace=True)
+
+    num_cols = ["active_minutes", "calories_burned", "distance_meters", "heart_points",
+                "heart_minutes", "avg_speed_mps", "step_count", "walking_duration_ms"]
+
+    dataframe[num_cols] = dataframe[num_cols].fillna(0)
+
     logger.info(f"Final dataframe created with shape: {dataframe.shape}")
     logger.info("Uploading dataframe to Azure Blob Storage...")
 
