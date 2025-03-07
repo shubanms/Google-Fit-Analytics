@@ -1,9 +1,12 @@
 import os
-import dotenv
 
+from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
 from src.core.logger import logger
 
+load_dotenv()
+
+print(f"AZURE_STORAGE_CONNECTION_STRING: {os.getenv('AZURE_STORAGE_CONNECTION_STRING')}")
 
 class BlobStorageClient:
     _instance = None  # Singleton instance
@@ -20,7 +23,6 @@ class BlobStorageClient:
             This method is called only once when the singleton instance is created.
         """
 
-        dotenv.load_dotenv()
 
         self.connection_string = str(os.getenv("AZURE_STORAGE_CONNECTION_STRING"))
         print(self.connection_string)
